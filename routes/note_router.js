@@ -8,7 +8,7 @@ noteRouter.get('/:id', notesController.getNotebyId);
 noteRouter.post('/', notesController.addNote);
 noteRouter.put('/:id', notesController.editnotebyID);
 noteRouter.delete('/:id', notesController.deletenote);
-noteRouter.delete('/:id', notesController.searchNotes);
+noteRouter.post('/:search', notesController.searchNotes);
 
 
 module.exports = {
