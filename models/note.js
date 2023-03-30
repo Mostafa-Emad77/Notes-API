@@ -1,4 +1,4 @@
-const courses = [
+const notes = [
 
     { id: 1,  name: "JAVA",              description: "i need to know basics",                         dueDate: "2023-01-05",      pinned: true  },
     { id: 2,  name: "C++",               description: "i need to do more practice",                    dueDate: "2023-01-08",      pinned: false },
@@ -33,4 +33,4 @@ const courses = [
 
 ];
 
-module.exports= {courses, };
+module.exports= {notes, };
