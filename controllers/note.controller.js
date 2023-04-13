@@ -1,102 +1,87 @@
 const { validateNote} = require('../helper/validation')
-const { notes } = require('../models/note');
-const getALLNotes = (req, res) => {
-    const sortedNotes = [...notes].sort((a, b) => b.pinned - a.pinned);
-    res.send(sortedNotes);
-};
+const { Note } = require('../models/note');
+const getALLNote = async (req, res) => {
+    const notes = await Note.find().sort({ pinned: -1 });
+    res.send(notes);
+  };
 
-const getNotebyId = (req,res) => {
-    const note = notes.find(c => c.id === parseInt(req.params.id));
-    if(!note){
-        res.status(404).send('The Note with the given ID not found !');
-    }else{
-        res.send(note);
+  const getNotebyId = async (req, res) => {
+    try {
+      const note = await Note.findById(req.params.id);
+      res.status(200).send(note);
+    } catch (error) {
+      res.status(400).send(error);
     }
-};
+  };
+  
 
-const searchNotes = (req, res) => {
+const searchNote = async (req, res) => {
     const searchTerm = req.body.term;
     const searchProperty = req.body.prop || 'name';
     const sortProperty = req.body.sort || 'id';
     const sortOrder = req.body.order || 'asc';
     const pinned = req.body.pinned;
+    const query = {};
+  query[searchProperty] = { $regex: searchTerm, $options: 'i' };
+    if (pinned !== undefined) {
+        query['pinned'] = pinned;
+      }     
+      const notes = await Note.find(query).sort({ [sortProperty]: sortOrder });
+      res.send(notes);
+};
 
-    let filteredNotes = notes.filter(note => {
-        const matchesSearchTerm = note[searchProperty]
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
-        const matchesPinnedStatus =
-            pinned === undefined || note.pinned === pinned;
-        return matchesSearchTerm && matchesPinnedStatus;
-    });
-    filteredNotes.sort((a, b) => {
-        if (sortOrder === 'asc') {
-            return a[sortProperty] > b[sortProperty] ? 1 : -1;
-        } else {
-            return a[sortProperty] < b[sortProperty] ? 1 : -1;
+const addNote = async (req, res) => {
+    try {
+      const result = validateNote(req.body);
+      if (result) {
+        const note = await Note.create(req.body);
+        res.status(200).send(note);
+      }
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
+const editnotebyID = async (req,res) => {
+    try{
+        const note = await Note.findOne({_id: req.params.id});
+        if(!note){
+            return res.status(404).send('Note not found');
         }
-    });
-
-    res.send(filteredNotes);
-};
-
-const addNote = (req,res)=> {
-
-    const result = validateNote(req.body);
-
-    if(result.error){
-        res.status(400).send(result.error.details[0].message);
-        console.log(result);
-        return;
+        const result = validateNote(req.body);
+        if(result){
+            if(req.body.name){
+                    note.name = req.body.name;
+           }
+            if(req.body.description){
+                note.description = req.body.description;
+            }
+            if(req.body.dueDate){
+              note.dueDate = req.body.dueDate;
+            }
+            await note.save();
+            res.status(200).send(note);
+        }
     }
-
-    const note = {
-        id: notes.length + 1,
-        name: req.body.name,
-        description: req.body.description,
-        dueDate: req.body.dueDate,
-        pinned: req.body.pinned || false
-    };
-    notes.push(note);
-    res.send(note);
-};
-
-const editnotebyID =  (req,res) => {
-    const note = notes.find(c => c.id === parseInt(req.params.id));
-    if(!note)
-        res.status(404).send('The Note with the given ID not found !');
-    
-    const result = validateNote(req.body);
-
-    if(result.error){
-        res.status(400).send(result.error.details[0].message);
-        console.log(result);
-        return;
+    catch(error){
+        res.status(400).send(error);
     }
-
-    note.name = req.body.name;
-    note.description = req.body.description;
-    note.dueDate = req.body.dueDate;
-    note.pinned = req.body.pinned;
-    res.send(note);
-
 };
 
-const deletenote = (req,res) => {
-    const note = notes.find(c => c.id === parseInt(req.params.id));
-    if(!note)
-        res.status(404).send('The Note with the given ID not found !');
-    
-    const index = notes.indexOf(note);
-    notes.splice(index , 1);
-
-    res.send(note);
-};
+const deletenote = async (req,res) => {
+    try{
+        const note = await Note.deleteOne({_id: req.params.id});
+        res.status(200).send();
+    }
+    catch(error){
+        res.status(400).send(error);
+    }
+};  
 
 module.exports={
-    getALLNotes,
+    getALLNote,
     getNotebyId,
-    searchNotes,
+    searchNote,
     editnotebyID,
     addNote,
     deletenote
