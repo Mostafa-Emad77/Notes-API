@@ -3,7 +3,7 @@ const noteRouter = Router()
 
 const notesController = require('../controllers/note.controller');
 
-noteRouter.get('/', notesController.getALLNotes);
+noteRouter.get('/', notesController.getALLNote);
 noteRouter.get('/:id', notesController.getNotebyId);
 noteRouter.post('/', notesController.addNote);
 noteRouter.put('/:id', notesController.editnotebyID);
