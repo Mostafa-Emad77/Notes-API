@@ -1,4 +1,33 @@
-const notes = [
+const mongoose = require('mongoose');
+const noteSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    dueDate: {
+        type: String,
+        required: true,
+    },
+    pinned: {
+        type: Boolean,
+        required: true,
+    },
+
+
+});
+
+const Note = mongoose.model('Note', noteSchema);
+
+module.exports = {
+    Note,
+};
+
+
+/*const notes = [
 
     { id: 1,  name: "JAVA",              description: "i need to know basics",                         dueDate: "2023-01-05",      pinned: true  },
     { id: 2,  name: "C++",               description: "i need to do more practice",                    dueDate: "2023-01-08",      pinned: false },
@@ -33,4 +62,4 @@ const notes = [
 
 ];
 
-module.exports= {notes, };
+module.exports= {notes, };*/
