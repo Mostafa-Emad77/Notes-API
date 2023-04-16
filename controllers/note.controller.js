@@ -1,5 +1,6 @@
 const { validateNote} = require('../helper/validation');
 const {addWithTemplate} = require('../features/template');
+const {searchNote} = require('../features/Search');
 const { Note } = require('../models/note');
 const getALLNote = async (req, res) => {
     const notes = await Note.find().sort({ pinned: -1 });
@@ -15,22 +16,6 @@ const getALLNote = async (req, res) => {
     }
   };
   
-
-const searchNote = async (req, res) => {
-    const searchTerm = req.body.term;
-    const searchProperty = req.body.prop || 'name';
-    const sortProperty = req.body.sort || 'id';
-    const sortOrder = req.body.order || 'asc';
-    const pinned = req.body.pinned;
-    const query = {};
-  query[searchProperty] = { $regex: searchTerm, $options: 'i' };
-    if (pinned !== undefined) {
-        query['pinned'] = pinned;
-      }     
-      const notes = await Note.find(query).sort({ [sortProperty]: sortOrder });
-      res.send(notes);
-};
-
 const addNote = async (req, res) => {
     try {
       const result = validateNote(req.body);
@@ -83,6 +68,7 @@ module.exports={
     getALLNote,
     getNotebyId,
     editnotebyID,
+    searchNote,
     addNote,
     deletenote,
     addWithTemplate
