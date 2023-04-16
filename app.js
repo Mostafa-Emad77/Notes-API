@@ -1,6 +1,6 @@
 const express = require("express");
-const app =express();
+const app = express();
 app.use(express.json());
-const {courseRouter} = require('./routes/course_router');
-app.use('/api/courses/',courseRouter);
+const { noteRouter } = require('./routes/note_router');
+app.use('/api/notes/', noteRouter);
 module.exports = { app };
