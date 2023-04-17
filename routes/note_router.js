@@ -3,6 +3,7 @@ const noteRouter = Router()
 
 const notesController = require('../controllers/note.controller');
 const Search = require('../features/Search');
+const Archive = require('../features/Archive');
 
 noteRouter.get('/', notesController.getALLNote);
 noteRouter.get('/:id', notesController.getNotebyId);
@@ -11,6 +12,10 @@ noteRouter.put('/:id', notesController.editnotebyID);
 noteRouter.delete('/:id', notesController.deletenote);
 noteRouter.post('/search', notesController.searchNote);
 noteRouter.post('/template',notesController.addWithTemplate);
+noteRouter.get('/archive', notesController.getAllArchiveNotes);
+noteRouter.put('/archive/:id', notesController.archiveNote);
+
+
 
 module.exports = {
     noteRouter

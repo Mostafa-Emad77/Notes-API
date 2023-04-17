@@ -1,6 +1,8 @@
 const { validateNote} = require('../helper/validation');
 const {addWithTemplate} = require('../features/template');
 const {searchNote} = require('../features/Search');
+const {archiveNote} = require('../features/Archive');
+const {getAllArchiveNotes} = require('../features/Archive');
 const { Note } = require('../models/note');
 const getALLNote = async (req, res) => {
     const notes = await Note.find().sort({ pinned: -1 });
@@ -71,5 +73,7 @@ module.exports={
     searchNote,
     addNote,
     deletenote,
-    addWithTemplate
+    addWithTemplate,
+    archiveNote,
+    getAllArchiveNotes
 }
