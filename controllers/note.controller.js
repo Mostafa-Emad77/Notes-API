@@ -5,9 +5,9 @@ const {archiveNote} = require('../features/Archive');
 const {getAllArchiveNotes} = require('../features/Archive');
 const { Note } = require('../models/note');
 const getALLNote = async (req, res) => {
-    const notes = await Note.find().sort({ pinned: -1 });
-    res.send(notes);
-  };
+  const notes = await Note.find({ $or: [{ archived: false }, { archived: { $exists: false } }] }).sort({ pinned: -1 });
+  res.send(notes);
+};
 
   const getNotebyId = async (req, res) => {
     try {
@@ -77,3 +77,4 @@ module.exports={
     archiveNote,
     getAllArchiveNotes
 }
+

@@ -16,7 +16,7 @@ const archiveNote = async (req, res) => {
   const getAllArchiveNotes = async (req, res) => {
     const archivedNotes = await Note.find({ archived: true }).sort({ pinned: -1 });
     res.send(archivedNotes);
-  };
+};
   
 module.exports={ 
     archiveNote,
