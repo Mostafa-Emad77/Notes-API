@@ -4,6 +4,7 @@ const {searchNote} = require('../features/Search');
 const {archiveNote} = require('../features/Archive');
 const {getAllArchiveNotes} = require('../features/Archive');
 const {exportNote} = require('../features/export');
+const {importNote} = require('../features/import');
 const { Note } = require('../models/note');
 const getALLNote = async (req, res) => {
   const notes = await Note.find({ $or: [{ archived: false }, { archived: { $exists: false } }] }).sort({ pinned: -1 });
@@ -77,6 +78,7 @@ module.exports={
     addWithTemplate,
     archiveNote,
     getAllArchiveNotes,
-    exportNote
+    exportNote,
+    importNote
 }
 
