@@ -49,6 +49,9 @@ const editnotebyID = async (req,res) => {
             if(req.body.dueDate){
               note.dueDate = req.body.dueDate;
             }
+            if(req.body.pinned !== undefined){
+              note.pinned = req.body.pinned;
+          }
             await note.save();
             res.status(200).send(note);
         }
