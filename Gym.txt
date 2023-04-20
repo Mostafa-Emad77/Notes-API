@@ -1,3 +1,0 @@
-Name: Gym
-Description: I have to the hym on the given date
-Due Date: 2023-05-30
