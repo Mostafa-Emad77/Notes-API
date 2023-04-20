@@ -25,7 +25,7 @@ const addWithTemplate = async (req, res) => {
         await Note.create(note);
         res.status(200).send(note);
     }
-    catch{
+    catch(error){
         res.status(400).send(error);
     }
 

@@ -61,7 +61,7 @@ const editnotebyID = async (req,res) => {
 const deletenote = async (req,res) => {
     try{
         const note = await Note.deleteOne({_id: req.params.id});
-        res.status(200).send();
+        res.status(200).send({message: "Note deleted successfully"});
     }
     catch(error){
         res.status(400).send(error);
